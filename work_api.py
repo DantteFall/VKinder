@@ -3,7 +3,7 @@ import time
 from group_token import gr_token
 from random import randrange
 import datetime
-from w_b import get_all_users
+from work_bd import get_all_users
 
 
 

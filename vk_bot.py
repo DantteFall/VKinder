@@ -1,5 +1,5 @@
 
-from w_a import long_poll_answer, write_msg, find_a_couple, goodbye, more
+from work_api import long_poll_answer, write_msg, find_a_couple, goodbye, more
 
 
 def hello(group_id, user_id):

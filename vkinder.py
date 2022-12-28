@@ -1,5 +1,5 @@
 from vk_bot import vkinder
-from w_b import get_connection, create_tables
+from work_bd import get_connection, create_tables
 from my_pass import pas
 from my_token import TOKEN
 
