@@ -1,5 +1,5 @@
 from work_api import long_poll_answer, write_msg, find_a_couple, goodbye, more, send_eror
-from work_bd import add_user_id, create_tables
+from work_bd import add_user_id, create_tables, get_search_list
 
 
 def hello(group_id, user_id):
@@ -13,7 +13,7 @@ def search(user_id, group_id, token, conn):
     search_accept = long_poll_answer(group_id)
     if search_accept != 'Ошибка сервера попробуйте позже':
         if search_accept['text'].lower() == 'найти':
-            used = []
+            used = get_search_list(user_id, conn)
             ferst_result = find_a_couple(user_id, used, group_id, token, conn)
             if ferst_result != 0:
                 answer = more(user_id, group_id)

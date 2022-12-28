@@ -3,7 +3,7 @@ import time
 from group_token import gr_token
 from random import randrange
 import datetime
-from work_bd import get_all_users
+from work_bd import get_all_users, add_user_search
 
 
 def get_info(id, token):
@@ -334,6 +334,7 @@ def find_a_couple(id, used, group_id, token, conn):
                 self_id = id
                 if photos != 'Ошибка сервера попробуйте позже':
                     send_similar_user(self_id, text, photos)
+                    add_user_search(id, user, conn)
                 else:
                     write_msg(id, 'Ошибка сервера попробуйте позже')
 
