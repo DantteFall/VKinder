@@ -6,7 +6,6 @@ import datetime
 from work_bd import get_all_users
 
 
-
 def get_info(id, token):
     '''Возвращает основные параметры пользователя'''
     url = 'https://api.vk.com/method/users.get'
@@ -94,6 +93,7 @@ def get_sex(id, group_id, token):
             else:
                 return 1
 
+
 def get_relation(id, group_id, token):
     '''Возращает семейное положение'''
     info_dict = get_info(id, token)
@@ -131,7 +131,6 @@ def get_relation(id, group_id, token):
             write_msg(id, 'Ошибка сервера попробуйте позже')
 
 
-
 def get_profile_photo(id, token):
     '''список фото с информацией о них'''
     url = f'https://api.vk.com/method/photos.getProfile'
@@ -147,7 +146,7 @@ def get_profile_photo(id, token):
     if 'response' in photos.keys():
         return photos['response']
     else:
-        return {'eror': 'Ошибка сервера'}
+        return {'eror': 'Ошибка сервера попробуйте позже'}
 
 
 def photo_list(id, token):
@@ -199,7 +198,7 @@ def long_poll_access(group_id):
         time.sleep(0.4)
         return massage_text
     else:
-        return {'eror': 'Ошибка сервера'}
+        return {'eror': 'Ошибка сервера попробуйте позже'}
 
 
 def long_poll_answer(group_id):
@@ -216,9 +215,9 @@ def long_poll_answer(group_id):
                 message = answer_aut['updates'][0]['object']['message']
                 return message
             else:
-                return 'Ошибка сервера'
+                return 'Ошибка сервера попробуйте позже'
         else:
-            return 'Ошибка сервера'
+            return 'Ошибка сервера попробуйте позже'
     else:
         return data['eror']
 
@@ -267,6 +266,7 @@ def get_list_sex(id, group_id, token, conn):
     else:
         return get_female(group_id, token, conn)
 
+
 def get_list_city(id, group_id, token, conn):
     '''Возвращает список пользователей из того же города, что и пользователь'''
     cimilar_city = []
@@ -278,6 +278,7 @@ def get_list_city(id, group_id, token, conn):
             cimilar_city.append(user)
     return cimilar_city
 
+
 def get_similar_age(id, group_id, token, conn):
     '''Возвращает список пользователей того же возраста, что и пользователь'''
     cimilar_age = []
@@ -288,6 +289,7 @@ def get_similar_age(id, group_id, token, conn):
         if user_age == self_age:
             cimilar_age.append(user)
     return cimilar_age
+
 
 def get_similar_list(id, group_id, token, conn):
     '''Находит подходящих людей по 3 признакам'''
@@ -320,6 +322,7 @@ def send_similar_user(self_user_id, text, photos):
     }
     requests.post(url, params=params)
 
+
 def find_a_couple(id, used, group_id, token, conn):
     '''Выдает подходящего пользователя'''
     similar_list = get_similar_list(id, group_id, token, conn)
@@ -329,7 +332,10 @@ def find_a_couple(id, used, group_id, token, conn):
                 photos = send_best_photos(user)
                 text = f'https://vk.com/id{user}'
                 self_id = id
-                send_similar_user(self_id, text, photos)
+                if photos != 'Ошибка сервера попробуйте позже':
+                    send_similar_user(self_id, text, photos)
+                else:
+                    write_msg(id, 'Ошибка сервера попробуйте позже')
 
     else:
         write_msg(id, 'У нас закончились подходяшие пары попробуйте позже')
@@ -339,9 +345,16 @@ def find_a_couple(id, used, group_id, token, conn):
 def more(user_id, group_id):
     write_msg(user_id, 'Если хотите получить другой вариант напишите еще, если хотите завершить поиск напишите стоп')
     answer = long_poll_answer(group_id)['text']
-    return answer
+    if answer != 'Ошибка сервера попробуйте позже':
+        return answer
+    else:
+        return 'Ошибка сервера попробуйте позже'
 
 
 def goodbye(user_id):
     write_msg(user_id, 'До новых втреч')
     return
+
+
+def send_eror(user_id):
+    write_msg(user_id, 'Ошибка сервера попробуйте позже')

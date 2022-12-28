@@ -6,7 +6,5 @@ from my_token import TOKEN
 conn = get_connection("VKinder", "postgres", pas)
 create_tables(conn)
 
-
-
 vkinder(217672166, TOKEN, conn)
 
