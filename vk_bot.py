@@ -1,4 +1,5 @@
 from work_api import long_poll_answer, write_msg, find_a_couple, goodbye, more, send_eror
+from work_bd import add_user_id, create_tables
 
 
 def hello(group_id, user_id):
@@ -51,6 +52,8 @@ def search(user_id, group_id, token, conn):
 
 
 def vkinder(group_id, token, conn):
+    create_tables(conn)
     user_id = long_poll_answer(group_id)['from_id']
     hello(group_id, user_id)
+    add_user_id(user_id, conn)
     search(user_id, group_id, token, conn)
